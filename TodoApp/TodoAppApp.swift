@@ -2,7 +2,7 @@
 //  TodoAppApp.swift
 //  TodoApp
 //
-//  Created by 천문필 on 1/20/25.
+//  Created by Jungman Bae on 1/20/25.
 //
 
 import SwiftUI
@@ -11,10 +11,12 @@ import SwiftData
 @main
 struct TodoAppApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
+        let schema = Schema([  //01
+            TodoItem.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let modelConfiguration = ModelConfiguration(schema: schema,
+                                                    isStoredInMemoryOnly: false,
+                                                    cloudKitDatabase: .automatic)  //01
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])

@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  TodoApp
 //
-//  Created by 천문필 on 1/20/25.
+//  Created by Jungman Bae on 1/20/25.
 //
 
 import SwiftUI
@@ -10,16 +10,16 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query private var todos: [TodoItem]  //01
 
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(items) { item in
+                ForEach(todos) { item in  //01
                     NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                        Text("Item at \(item.createdAt, format: Date.FormatStyle(date: .numeric, time: .standard))")
                     } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        Text(item.createdAt, format: Date.FormatStyle(date: .numeric, time: .standard))
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -39,23 +39,23 @@ struct ContentView: View {
         }
     }
 
-    private func addItem() {
+    private func addItem() {  //01
         withAnimation {
-            let newItem = Item(timestamp: Date())
+            let newItem = TodoItem(title: "New Item")
             modelContext.insert(newItem)
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteItems(offsets: IndexSet) {  //01
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(todos[index])
             }
         }
     }
 }
 
-#Preview {
+#Preview {  //01
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: TodoItem.self, inMemory: true)
 }
