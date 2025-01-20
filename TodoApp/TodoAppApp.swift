@@ -11,8 +11,8 @@ import SwiftData
 @main
 struct TodoAppApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([  //01
-            TodoItem.self,
+        let schema = Schema([
+            TodoItem.self, //01 Item을 삭제하고 TodoItem 만들었으니깐
         ])
         let modelConfiguration = ModelConfiguration(schema: schema,
                                                     isStoredInMemoryOnly: false,

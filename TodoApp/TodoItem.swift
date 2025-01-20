@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-// 01
+// 01 새로 만든거
 @Model
 final class TodoItem {
     var id: String = UUID().uuidString
