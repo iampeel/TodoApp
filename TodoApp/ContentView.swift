@@ -10,52 +10,51 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var todos: [TodoItem]  //01 Item을 삭제하고 TodoItem 만들었으니깐
+    @Query private var todos: [TodoItem]
+    
+    @State private var showingAddTodo = false
 
     var body: some View {
-        NavigationSplitView {
+        NavigationStack {
             List {
-                ForEach(todos) { item in  //01 todos으로 이름 변경했으니깐
+                ForEach(todos) { item in
                     NavigationLink {
-                        Text("Item at \(item.createdAt, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                        Text("\(item.title) at \(item.createdAt, format: Date.FormatStyle(date: .numeric, time: .standard))")
                     } label: {
-                        Text(item.createdAt, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        Text("\(item.title) at \(item.createdAt, format: Date.FormatStyle(date: .numeric, time: .standard))")
                     }
                 }
                 .onDelete(perform: deleteItems)
             }
+            .navigationTitle("Todo List")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
+                    Button(action: {
+                        showingAddTodo = true
+                    }) {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
             }
-        } detail: {
-            Text("Select an item")
         }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = TodoItem(title: "New Item") //01
-            modelContext.insert(newItem)
+        .sheet(isPresented: $showingAddTodo) {
+            AddTodoView()
         }
     }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(todos[index])  //01
+                modelContext.delete(todos[index])
             }
         }
     }
 }
 
-#Preview {  //01
+#Preview {
     ContentView()
         .modelContainer(for: TodoItem.self, inMemory: true)
 }
